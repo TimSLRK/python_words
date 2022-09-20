@@ -28,7 +28,7 @@ def main():
                 count -= 1
                 print('Количество попыток', count)
             else:
-                main_game()
+                main_game
         if count == 0:
             print('К сожалению, вы проиграли, загаданное слово:', word )
         game = input('Хотите еще сыграть? д - да, н - нет ').upper()
