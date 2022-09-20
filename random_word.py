@@ -18,21 +18,19 @@ def main():
                     'исследование', 'гражданин', 'начальник', 'принцип', 'воздух', 'характер', 'борьба', 'использование',
                     'размер', 'образование', 'мальчик', 'представитель', 'участие', 'девочка', 'политика', 'картина', 
                 ]
-        count = 6
-        while count > 0:
-            word = get_word(word_list)
-            state = display_hangman(count)
-            print('Ваше состояние:', state)
-            main_game = play_game(word)
-            if not main_game:
-                count -= 1
-                print('Количество попыток', count)
-            else:
-                main_game
-        if count == 0:
-            print('К сожалению, вы проиграли, загаданное слово:', word )
+        word = get_word(word_list)
+        #print(word)
+        #count = 6
+        #state = display_hangman(count)
+        #print('Ваше состояние:', state)
+        main_game = play_game(word)
+        if main_game:
+            print('Поздравляю, вы победили!!!\nЗагаданное слово', word)
+        else:
+            print('К сожалению вы проиграли, загаданное слово:', word)
         game = input('Хотите еще сыграть? д - да, н - нет ').upper()
         if game != 'д'.upper():
+            print('Хорошего дня!')
             break
 
 
@@ -125,11 +123,13 @@ def input_parametre():
 
 def play_game(text):
     star = '*'
-    word = list(text[0] + '*' * (len(text) - 2) + text[-1])
-    flag = True
+    word = list('*' * len(text))
+    flag = True 
     guess_letters = []
     guess_words = []
-    while star in word:
+    count = 6
+    print('Ваше состояние', display_hangman(count))
+    while star in word and count > 0:
         print('Слово:', ''.join(word))
         char = input_parametre()
         if char in text:
@@ -148,17 +148,29 @@ def play_game(text):
                     print('Вы уже угадывали это слово.')
                     continue
                 elif char == text:
-                    print('Поздравляю, вы угадали!!!')
+                    #print('Поздравляю, вы угадали!!!')
                     guess_words.append(char)
-                else:
-                    print('Это неверный ответ:(')
-                    flag = False         
+                    break
+                else: 
+                    count -= 1
+                    print('Это неверный ответ, ваше состояние', display_hangman(count))
+                    guess_words.append(char)       
         else:
-            print('К сожалению, такой буквы нету...')
-            flag = False
+            if char in guess_letters or char in guess_words:
+                print('Вы уже пробовали эту букву или слово...')
+            else:
+                count -= 1
+                if len(char) == 1:
+                    print('К сожалению, такой буквы нету')
+                    guess_letters.append(char)
+                elif len(char) > 1:
+                    guess_words.append(char)
+                    print('К сожалению, ответ неверный')
+                print('Ваше состояние:', display_hangman(count))
+
+    if count == 0:
+        flag = False
     return flag
-
-
 main()           
         
 
